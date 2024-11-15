@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Tutoría</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Añade estilos para mensajes flash */
+        .flash {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .flash.success {
+            background-color: #d4edda; /* Verde claro */
+            color: #155724; /* Verde oscuro */
+        }
+        .flash.danger {
+            background-color: #f8d7da; /* Rojo claro */
+            color: #721c24; /* Rojo oscuro */
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Tutoría</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <input type="text" name="codigo" value="{{ tutoria.codigo }}" placeholder="Código de la Tutoría" required>
+        <input type="text" name="espacio_academico" value="{{ tutoria.espacio_academico }}" placeholder="Espacio Académico" required>
+        <select name="docente" required>
+            <option value="">Seleccionar Docente</option>
+            {% for docente in docentes %}
+                <option value="{{ docente.id }}" {% if docente.id == tutoria.docente_id %}selected{% endif %}>{{ docente.username }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <a href="{{ url_for('manage_tutorias') }}">Volver a la lista de tutorías</a>
+    <a href="{{ url_for('dashboard') }}">Volver al Dashboard</a>
+    <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+</body>
+</html>

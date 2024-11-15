@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Estilo básico para los mensajes flash */
+        .flash {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #28a745; /* Verde para mensajes de éxito */
+        }
+        .danger {
+            background-color: #dc3545; /* Rojo para mensajes de error */
+        }
+        .warning {
+            background-color: #ffc107; /* Amarillo para mensajes de advertencia */
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Usuario</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <input type="text" name="username" value="{{ user.username }}" required>
+        <input type="text" name="identificacion" value="{{ user.identificacion }}" required>
+        
+        <label for="role">Selecciona el tipo de usuario:</label>
+        <select name="role" id="role" required>
+            <option value="student" {% if user.role == 'student' %}selected{% endif %}>Estudiante</option>
+            <option value="teacher" {% if user.role == 'teacher' %}selected{% endif %}>Profesor</option>
+            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrador</option>
+        </select>
+        
+        <!-- Campo para cambiar la contraseña -->
+        <label for="password">Nueva Contraseña (opcional):</label>
+        <input type="password" name="password" placeholder="Dejar en blanco para no cambiar">
+        
+        <button type="submit">Actualizar</button>
+    </form>
+    <a href="{{ url_for('manage_users') }}">Volver a la administración de usuarios</a>
+    <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+</body>
+</html>
